@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const { hash } = require('bcrypt')
+const beautifyUnique = require('mongoose-beautiful-unique-validation')
 
 const UserSchema = new Schema({
   email: {
@@ -22,6 +23,7 @@ const UserSchema = new Schema({
     match: /\$2[ab]\$\d\d\$[\w./]{53}/,
   },
 })
+UserSchema.plugin(beautifyUnique)
 
 const User = model('User', UserSchema)
 

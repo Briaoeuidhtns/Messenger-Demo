@@ -5,6 +5,7 @@ require('dotenv').config({ debug: process.env.DEBUG })
 const app = require('../app')
 const http = require('http')
 const mongoose = require('mongoose')
+const { User } = require('../schema/User')
 
 /**
  * Normalize a port into a number, string, or false.
@@ -36,6 +37,9 @@ const run = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
+
+  // Ensure indexes are created first
+  await User.init()
 
   mongoose.connection.on('error', (err) => console.error(err))
 
