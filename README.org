@@ -1,0 +1,28 @@
+* Messenger
+A messenger application using React, Material-UI, React-Router, Node, & Express.js.
+
+** Getting started
+The project is broken down into a client and server folder.
+
+*** Setup
+**** Mongo
+Start a mongo instance.
+
+This can be done via docker:
+#+begin_src bash
+docker run --network messenger -p27017:27017 --name messenger-mongo -d mongo:4.4.4
+#+end_src
+
+Connection information should be exposed via the ~MONGO_URL~ env var. Assuming a local instance with the default port like above, this should be ~mongodb://localhost:27017/messenger~
+
+**** Signing keys
+Generate keys for signing the JWT.
+
+The key should be exposed as the env var ~JWT_PRIVATE_KEY~. The algorithm corresponding to your key type should be chosen from [[https://www.npmjs.com/package/jsonwebtoken#algorithms-supported][this table]] and exposed via ~JWT_ALG~.
+
+If adding to a =.env= file, it should be enclosed in quotes with escaped newlines.
+
+For instance, to use ECDSA with the P-521 curve, and add to a .env in the current dir:
+#+begin_src
+openssl ecparam -name secp521r1 -genkey -noout | node -e 'console.log("JWT_ALG=ES512\nJWT_PRIVATE_KEY=" + JSON.stringify(require("fs").readFileSync(0, "utf-8")))' >> .env
+#+end_src
