@@ -1,100 +1,100 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
-import Snackbar from "@material-ui/core/Snackbar";
-import { Link, useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+import Paper from '@material-ui/core/Paper'
+import Box from '@material-ui/core/Box'
+import Hidden from '@material-ui/core/Hidden'
+import Snackbar from '@material-ui/core/Snackbar'
+import { Link, useHistory } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    minHeight: "100vh",
-    "& .MuiInput-underline:before": {
-      borderBottom: "1.2px solid rgba(0, 0, 0, 0.2)"
-    }
+    minHeight: '100vh',
+    '& .MuiInput-underline:before': {
+      borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
+    },
   },
   welcome: {
     fontSize: 26,
     paddingBottom: 20,
-    color: "#000000",
-    fontWeight: 500
+    color: '#000000',
+    fontWeight: 500,
   },
   heroText: {
     fontSize: 26,
-    textAlign: "center",
-    color: "white",
+    textAlign: 'center',
+    color: 'white',
     marginTop: 30,
-    maxWidth: 300
+    maxWidth: 300,
   },
   overlay: {
     backgroundImage:
-      "linear-gradient(180deg, rgb(58,141,255, 0.75) 0%, rgb(134,185,255, 0.75) 100%)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    flexDirection: "column",
-    minHeight: "100vh",
+      'linear-gradient(180deg, rgb(58,141,255, 0.75) 0%, rgb(134,185,255, 0.75) 100%)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    flexDirection: 'column',
+    minHeight: '100vh',
     paddingBottom: 145,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonHeader: {
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    flexDirection: "column",
-    bgcolor: "background.paper",
-    minHeight: "100vh",
-    paddingTop: 23
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    bgcolor: 'background.paper',
+    minHeight: '100vh',
+    paddingTop: 23,
   },
   accBtn: {
     width: 170,
     height: 54,
     borderRadius: 5,
-    filter: "drop-shadow(0px 2px 6px rgba(74,106,149,0.2))",
-    backgroundColor: "#ffffff",
-    color: "#3a8dff",
-    boxShadow: "none",
-    marginRight: 35
+    filter: 'drop-shadow(0px 2px 6px rgba(74,106,149,0.2))',
+    backgroundColor: '#ffffff',
+    color: '#3a8dff',
+    boxShadow: 'none',
+    marginRight: 35,
   },
   noAccBtn: {
     fontSize: 14,
-    color: "#b0b0b0",
+    color: '#b0b0b0',
     fontWeight: 400,
-    textAlign: "center",
+    textAlign: 'center',
     marginRight: 21,
-    whiteSpace: "nowrap"
+    whiteSpace: 'nowrap',
   },
   image: {
-    backgroundImage: "url(./images/bg-img.png)",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center"
+    backgroundImage: 'url(./images/bg-img.png)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
   box: {
     padding: 24,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    flexDirection: "column",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    flexDirection: 'column',
     maxWidth: 900,
-    margin: "auto"
+    margin: 'auto',
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
   },
-  label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
+  label: { fontSize: 19, color: 'rgb(0,0,0,0.4)', paddingLeft: '5px' },
   submit: {
     margin: theme.spacing(3, 2, 2),
     padding: 10,
@@ -103,54 +103,54 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 3,
     marginTop: 49,
     fontSize: 16,
-    fontWeight: "bold",
-    backgroundColor: "#3a8dff"
+    fontWeight: 'bold',
+    backgroundColor: '#3a8dff',
   },
   inputs: {
-    marginTop: ".8rem",
-    height: "2rem",
-    padding: "5px"
+    marginTop: '.8rem',
+    height: '2rem',
+    padding: '5px',
   },
-  link: { textDecoration: "none", display: "flex", flexWrap: "nowrap" },
+  link: { textDecoration: 'none', display: 'flex', flexWrap: 'nowrap' },
   forgot: {
     paddingRight: 10,
-    color: "#3a8dff"
-  }
-}));
+    color: '#3a8dff',
+  },
+}))
 
 // Login middleware placeholder
 function useLogin() {
-  const history = useHistory();
+  const history = useHistory()
 
   const login = async (email, password) => {
-    console.log(email, password);
+    console.log(email, password)
     const res = await fetch(
       `/auth/login?email=${email}&password=${password}`
-    ).then(res => res.json());
-    localStorage.setItem("user", res.user);
-    localStorage.setItem("token", res.token);
-    history.push("/dashboard");
-  };
-  return login;
+    ).then((res) => res.json())
+    localStorage.setItem('user', res.user)
+    localStorage.setItem('token', res.token)
+    history.push('/dashboard')
+  }
+  return login
 }
 
 export default function Login() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const classes = useStyles()
+  const [open, setOpen] = React.useState(true)
 
-  const history = useHistory();
+  const history = useHistory()
 
   React.useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
-  }, []);
+    const user = localStorage.getItem('user')
+    if (user) history.push('/dashboard')
+  }, [])
 
-  const login = useLogin();
+  const login = useLogin()
 
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    setOpen(false);
-  };
+    if (reason === 'clickaway') return
+    setOpen(false)
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -194,31 +194,31 @@ export default function Login() {
             </Grid>
             <Formik
               initialValues={{
-                email: "",
-                password: ""
+                email: '',
+                password: '',
               }}
               validationSchema={Yup.object().shape({
                 email: Yup.string()
-                  .required("Email is required")
-                  .email("Email is not valid"),
+                  .required('Email is required')
+                  .email('Email is not valid'),
                 password: Yup.string()
-                  .required("Password is required")
-                  .max(100, "Password is too long")
-                  .min(6, "Password too short")
+                  .required('Password is required')
+                  .max(100, 'Password is too long')
+                  .min(6, 'Password too short'),
               })}
               onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
-                setStatus();
+                setStatus()
                 login(email, password).then(
                   () => {
                     // useHistory push to chat
-                    console.log(email, password);
-                    return;
+                    console.log(email, password)
+                    return
                   },
-                  error => {
-                    setSubmitting(false);
-                    setStatus(error);
+                  (error) => {
+                    setSubmitting(false)
+                    setStatus(error)
                   }
-                );
+                )
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -233,13 +233,13 @@ export default function Login() {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{ classes: { input: classes.inputs } }}
                     name="email"
                     autoComplete="email"
                     autoFocus
-                    helperText={touched.email ? errors.email : ""}
+                    helperText={touched.email ? errors.email : ''}
                     error={touched.email && Boolean(errors.email)}
                     value={values.email}
                     onChange={handleChange}
@@ -254,7 +254,7 @@ export default function Login() {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{
                       classes: { input: classes.inputs },
@@ -262,11 +262,11 @@ export default function Login() {
                         <Typography className={classes.forgot}>
                           Forgot?
                         </Typography>
-                      )
+                      ),
                     }}
                     type="password"
                     autoComplete="current-password"
-                    helperText={touched.password ? errors.password : ""}
+                    helperText={touched.password ? errors.password : ''}
                     error={touched.password && Boolean(errors.password)}
                     value={values.password}
                     onChange={handleChange}
@@ -294,8 +294,8 @@ export default function Login() {
         </Box>
         <Snackbar
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center"
+            vertical: 'bottom',
+            horizontal: 'center',
           }}
           open={open}
           autoHideDuration={6000}
@@ -316,5 +316,5 @@ export default function Login() {
         />
       </Grid>
     </Grid>
-  );
+  )
 }
