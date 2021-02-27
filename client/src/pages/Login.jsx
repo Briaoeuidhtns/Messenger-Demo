@@ -143,7 +143,7 @@ export default function Login() {
   React.useEffect(() => {
     const user = localStorage.getItem('user')
     if (user) history.push('/dashboard')
-  }, [])
+  }, [history])
 
   const login = useLogin()
 
@@ -158,7 +158,7 @@ export default function Login() {
       <Grid item xs={false} sm={4} md={5} className={classes.image}>
         <Box className={classes.overlay}>
           <Hidden xsDown>
-            <img width={67} src="/images/chatBubble.png" />
+            <img width={67} src="/images/chatBubble.png" alt="" />
             <Hidden smDown>
               <p className={classes.heroText}>
                 Converse with anyone with any language
@@ -174,11 +174,7 @@ export default function Login() {
               <Button className={classes.noAccBtn}>
                 Don't have an account?
               </Button>
-              <Button
-                color="background"
-                className={classes.accBtn}
-                variant="contained"
-              >
+              <Button className={classes.accBtn} variant="contained">
                 Create account
               </Button>
             </Link>
@@ -270,7 +266,6 @@ export default function Login() {
                     error={touched.password && Boolean(errors.password)}
                     value={values.password}
                     onChange={handleChange}
-                    type="password"
                   />
 
                   <Box textAlign="center">

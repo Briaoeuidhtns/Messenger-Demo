@@ -22,6 +22,8 @@ const configure = ({ key, jwtOpts, cookie }) => {
           .status(200)
           .cookie(cookie, sign({ data: { id: realUser._id } }, key, jwtOpts), {
             httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
           })
           .send({ data: { kind: 'success' } })
       } else {
