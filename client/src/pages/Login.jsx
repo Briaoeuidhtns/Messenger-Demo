@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import Box from '@material-ui/core/Box'
 import Hidden from '@material-ui/core/Hidden'
 import Snackbar from '@material-ui/core/Snackbar'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
@@ -14,6 +14,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import { useUser } from '../context/UserContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -130,38 +131,15 @@ const loginSchema = Yup.object().shape({
     .min(6, 'Password too short'),
 })
 
-// Login middleware placeholder
-function useLogin() {
-  const history = useHistory()
-
-  const login = async (email, password) => {
-    console.log(email, password)
-    const res = await fetch(
-      `/auth/login?email=${email}&password=${password}`
-    ).then((res) => res.json())
-    localStorage.setItem('user', res.user)
-    localStorage.setItem('token', res.token)
-    history.push('/dashboard')
-  }
-  return login
-}
-
 export default function Login() {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(true)
-
-  const history = useHistory()
-
-  React.useEffect(() => {
-    const user = localStorage.getItem('user')
-    if (user) history.push('/dashboard')
-  }, [history])
-
-  const login = useLogin()
+  const [errorOpen, setErrorOpen] = useState(true)
+  const { login, error: loginError } = useUser()
+  useEffect(() => setErrorOpen(!!loginError), [loginError])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') return
-    setOpen(false)
+    setErrorOpen(false)
   }
 
   return (
@@ -205,17 +183,7 @@ export default function Login() {
               validationSchema={loginSchema}
               onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
                 setStatus()
-                login(email, password).then(
-                  () => {
-                    // useHistory push to chat
-                    console.log(email, password)
-                    return
-                  },
-                  (error) => {
-                    setSubmitting(false)
-                    setStatus(error)
-                  }
-                )
+                login(email, password).then(() => setSubmitting(false))
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -293,21 +261,19 @@ export default function Login() {
             vertical: 'bottom',
             horizontal: 'center',
           }}
-          open={open}
+          open={errorOpen}
           autoHideDuration={6000}
           onClose={handleClose}
           message="Login failed"
           action={
-            <React.Fragment>
-              <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleClose}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
           }
         />
       </Grid>

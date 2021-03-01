@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper'
 import Box from '@material-ui/core/Box'
 import Hidden from '@material-ui/core/Hidden'
 import Snackbar from '@material-ui/core/Snackbar'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
@@ -14,6 +13,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import { useUser } from '../context/UserContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,43 +132,19 @@ const signupSchema = Yup.object().shape({
     .min(6, 'Password too short'),
 })
 
-function useRegister() {
-  const history = useHistory()
-
-  const login = async (username, email, password) => {
-    console.log(email, password)
-    const res = await fetch(
-      `/auth/signup?username=${username}&email=${email}&password=${password}`
-    ).then((res) => res.json())
-    console.log(res)
-    localStorage.setItem('user', res.user)
-    localStorage.setItem('token', res.token)
-    history.push('/dashboard')
-  }
-  return login
-}
-
 export default function Register() {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(true)
-
-  const register = useRegister()
+  const [errorOpen, setErrorOpen] = useState(true)
+  const { register, error: loginError } = useUser()
+  useEffect(() => setErrorOpen(!!loginError), [loginError])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') return
-    setOpen(false)
+    setErrorOpen(false)
   }
-
-  const history = useHistory()
-
-  React.useEffect(() => {
-    const user = localStorage.getItem('user')
-    if (user) history.push('/dashboard')
-  }, [history])
 
   return (
     <Grid container component="main" className={classes.root}>
-      <CssBaseline />
       <Grid item xs={false} sm={4} md={5} className={classes.image}>
         <Box className={classes.overlay}>
           <Hidden xsDown>
@@ -214,16 +190,8 @@ export default function Register() {
                 { setStatus, setSubmitting }
               ) => {
                 setStatus()
-                register(username, email, password).then(
-                  () => {
-                    // useHistory push to chat
-                    console.log(email, password)
-                    return
-                  },
-                  (error) => {
-                    setSubmitting(false)
-                    setStatus(error)
-                  }
+                register(username, email, password).then(() =>
+                  setSubmitting(false)
                 )
               }}
             >
@@ -319,21 +287,19 @@ export default function Register() {
             vertical: 'bottom',
             horizontal: 'center',
           }}
-          open={open}
+          open={errorOpen}
           autoHideDuration={6000}
           onClose={handleClose}
           message="Email already exists"
           action={
-            <React.Fragment>
-              <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleClose}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
           }
         />
       </Grid>
