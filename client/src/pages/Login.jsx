@@ -118,6 +118,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const loginSchema = Yup.object().shape({
+  email: Yup.string()
+    .ensure()
+    .required('Email is required')
+    .email('Email is not valid'),
+  password: Yup.string()
+    .ensure()
+    .required('Password is required')
+    .max(100, 'Password is too long')
+    .min(6, 'Password too short'),
+})
+
 // Login middleware placeholder
 function useLogin() {
   const history = useHistory()
@@ -189,19 +201,8 @@ export default function Login() {
               </Grid>
             </Grid>
             <Formik
-              initialValues={{
-                email: '',
-                password: '',
-              }}
-              validationSchema={Yup.object().shape({
-                email: Yup.string()
-                  .required('Email is required')
-                  .email('Email is not valid'),
-                password: Yup.string()
-                  .required('Password is required')
-                  .max(100, 'Password is too long')
-                  .min(6, 'Password too short'),
-              })}
+              initialValues={loginSchema.getDefault()}
+              validationSchema={loginSchema}
               onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
                 setStatus()
                 login(email, password).then(

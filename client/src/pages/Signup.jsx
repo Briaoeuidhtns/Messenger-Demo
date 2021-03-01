@@ -116,6 +116,22 @@ const useStyles = makeStyles((theme) => ({
   link: { textDecoration: 'none', display: 'flex', flexWrap: 'nowrap' },
 }))
 
+const signupSchema = Yup.object().shape({
+  username: Yup.string()
+    .ensure()
+    .required('Username is required')
+    .max(40, 'Username is too long'),
+  email: Yup.string()
+    .ensure()
+    .required('Email is required')
+    .email('Email is not valid'),
+  password: Yup.string()
+    .ensure()
+    .required('Password is required')
+    .max(100, 'Password is too long')
+    .min(6, 'Password too short'),
+})
+
 function useRegister() {
   const history = useHistory()
 
@@ -191,22 +207,8 @@ export default function Register() {
               </Grid>
             </Grid>
             <Formik
-              initialValues={{
-                email: '',
-                password: '',
-              }}
-              validationSchema={Yup.object().shape({
-                username: Yup.string()
-                  .required('Username is required')
-                  .max(40, 'Username is too long'),
-                email: Yup.string()
-                  .required('Email is required')
-                  .email('Email is not valid'),
-                password: Yup.string()
-                  .required('Password is required')
-                  .max(100, 'Password is too long')
-                  .min(6, 'Password too short'),
-              })}
+              initialValues={signupSchema.getDefault()}
+              validationSchema={signupSchema}
               onSubmit={(
                 { username, email, password },
                 { setStatus, setSubmitting }
