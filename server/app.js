@@ -6,6 +6,7 @@ const logger = require('morgan')
 const { jwtCookieParser } = require('./middleware/auth')
 const { requireUser } = require('./middleware/auth')
 const sendUserInfo = require('./middleware/sendUserInfo')
+const clearCookies = require('./middleware/clearCookies')
 const { User } = require('./schema/User')
 
 const registerRouter = require('./routes/register')
@@ -42,7 +43,12 @@ app.use(
   '/user',
   loginRouter(tokenSettings),
   registerRouter(tokenSettings),
-  Router().get('/info', requireUser, sendUserInfo)
+  Router().get('/info', requireUser, sendUserInfo),
+  Router().post(
+    '/logout',
+    clearCookies(JWT_COOKIE_NAME, 'AUTHENTICATED'),
+    (_, res) => res.status(200).send()
+  )
 )
 
 // catch 404 and forward to error handler
