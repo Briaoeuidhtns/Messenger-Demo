@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-scripts/config/webpackDevServer.config.js b/node_modules/react-scripts/config/webpackDevServer.config.js
+index bf8c98d..dc731e9 100644
+--- a/node_modules/react-scripts/config/webpackDevServer.config.js
++++ b/node_modules/react-scripts/config/webpackDevServer.config.js
+@@ -96,7 +96,7 @@ module.exports = function (proxy, allowedHost) {
+     // src/node_modules is not ignored to support absolute imports
+     // https://github.com/facebook/create-react-app/issues/1065
+     watchOptions: {
+-      ignored: ignoredFiles(paths.appSrc),
++      ignored: [ignoredFiles(paths.appSrc), '**/.#*', '**/*~', '**/#*#'],
+     },
+     https: getHttpsConfig(),
+     host,
