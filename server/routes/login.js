@@ -14,13 +14,13 @@ const configure = ({ key, jwtOpts, cookie }) => {
         user: { email, password },
       } = req.body
 
-      const realHash = (await User.findOne({ email }, 'password').exec())
-        ?.password
+      const realUser = await User.findOne({ email }).exec()
+      const realHash = realUser?.password
 
       if (realHash && (await compare(password, realHash))) {
         res
           .status(200)
-          .cookie(cookie, sign({ data: { email } }, key, jwtOpts), {
+          .cookie(cookie, sign({ data: { id: realUser._id } }, key, jwtOpts), {
             httpOnly: true,
           })
           .send({ data: { kind: 'success' } })
