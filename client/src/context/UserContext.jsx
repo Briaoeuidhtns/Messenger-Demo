@@ -7,36 +7,39 @@ export const UserManager = ({ children }) => {
   const [user, setUser] = useState()
   const [error, setError] = useState()
 
-  const loginRequest = async (email, password) => {
-    const res = await (
-      await fetch('/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user: { email, password } }),
-      })
-    ).json()
-    if (res.error) throw res.error
-
-    return res.data.user
+  const login = async (email, password) => {
+    try {
+      const res = await (
+        await fetch('/user/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user: { email, password } }),
+        })
+      ).json()
+      if (res.error) throw res.error
+      setUser(res.data.user)
+    } catch (err) {
+      setError(err)
+    }
   }
-  const login = (email, password) =>
-    loginRequest(email, password).then(setUser, setError)
 
-  const registerRequest = async (name, email, password) => {
-    const res = await (
-      await fetch('/user/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: { name, email, password } }),
-      })
-    ).json()
-    if (res.error) throw res.error
-    return res.data.user
+  const register = async (name, email, password) => {
+    try {
+      const res = await (
+        await fetch('/user/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user: { name, email, password } }),
+        })
+      ).json()
+      if (res.error) throw res.error
+      setUser(res.data.user)
+    } catch (err) {
+      setError(err)
+    }
   }
-  const register = (name, email, password) =>
-    registerRequest(name, email, password).then(setUser, setError)
 
   const infoRequest = async () => {
     const res = await (await fetch('/user/info')).json()
