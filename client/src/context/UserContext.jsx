@@ -54,13 +54,11 @@ export const UserManager = ({ children }) => {
     if (isAuthed && !user) infoRequest().then(setUser, setError)
   }, [user])
 
-  // XXX fake logout, real token still stored
-  const logout = () => {
+  const logout = async () => {
+    await fetch('/user/logout', {
+      method: 'POST',
+    })
     setUser()
-    return (document.cookie = cookie.serialize('AUTHENTICATED', '', {
-      expires: new Date(0),
-      SameSite: 'none',
-    }))
   }
   return (
     <UserContext.Provider value={{ user, error, login, logout, register }}>
