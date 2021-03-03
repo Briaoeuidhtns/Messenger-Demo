@@ -34,10 +34,13 @@ const listen = (server, port) =>
 
 const run = async () => {
   // Mongoose init
-  await mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  // Disable all deprecated behavior
+  mongoose
+    .set('useNewUrlParser', true)
+    .set('useFindAndModify', false)
+    .set('useCreateIndex', true)
+    .set('useUnifiedTopology', true)
+  await mongoose.connect(process.env.MONGO_URL)
 
   // Ensure indexes are created first
   await User.init()
