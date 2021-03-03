@@ -3,7 +3,7 @@ import { Route, Redirect, useLocation } from 'react-router-dom'
 import { useUser } from './context/UserContext'
 
 export const known = (user) => !!user
-export const unknown = (user) => !user
+export const unknown = (user) => !known(user)
 export const all = () => true
 export const none = () => false
 
@@ -14,7 +14,7 @@ export const none = () => false
  *
  * Only intended to handle children as children elements.
  */
-const AuthzdRoute = ({
+const AuthorizedRoute = ({
   allow = known,
   fallbackPath = '/signup',
   children,
@@ -39,4 +39,4 @@ const AuthzdRoute = ({
   )
 }
 
-export default AuthzdRoute
+export default AuthorizedRoute

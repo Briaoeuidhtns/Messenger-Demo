@@ -11,7 +11,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import { UserManager } from './context/UserContext'
-import AuthzdRoute, { unknown } from './AuthzdRoute'
+import AuthorizedRoute, { unknown } from './AuthorizedRoute'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import SidebarPage from './SidebarPage'
 
@@ -23,15 +23,23 @@ const App = () => (
     <UserManager>
       <Router>
         <Switch>
-          <AuthzdRoute path="/login" allow={unknown} fallbackPath="/dashboard">
+          <AuthorizedRoute
+            path="/login"
+            allow={unknown}
+            fallbackPath="/dashboard"
+          >
             <Login />
-          </AuthzdRoute>
-          <AuthzdRoute path="/signup" allow={unknown} fallbackPath="/dashboard">
+          </AuthorizedRoute>
+          <AuthorizedRoute
+            path="/signup"
+            allow={unknown}
+            fallbackPath="/dashboard"
+          >
             <Signup />
-          </AuthzdRoute>
-          <AuthzdRoute path="/dashboard">
+          </AuthorizedRoute>
+          <AuthorizedRoute path="/dashboard">
             <Dashboard />
-          </AuthzdRoute>
+          </AuthorizedRoute>
           <Route path="/test">
             <SidebarPage />
           </Route>
