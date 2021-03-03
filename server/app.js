@@ -29,7 +29,6 @@ app.use(
     cookie: JWT_COOKIE_NAME,
     key: process.env.JWT_PRIVATE_KEY,
     jwtOpts: { algorithms: [process.env.JWT_ALG] },
-    name: 'user',
     convert: User.fromClaim.bind(User),
   })
 )

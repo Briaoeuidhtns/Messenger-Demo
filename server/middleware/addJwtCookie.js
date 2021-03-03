@@ -7,7 +7,7 @@ const addJwtCookie = ({ key, jwtOpts, cookie }) => (req, res, next) => {
   res
     .cookie(
       cookie,
-      sign({ data: { email: res.locals.user.data.email } }, key, jwtOpts),
+      sign({ data: { email: req.user.data.email } }, key, jwtOpts),
       {
         httpOnly: true,
         secure: true,

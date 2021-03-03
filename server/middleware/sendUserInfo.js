@@ -1,7 +1,7 @@
 const express = require('express')
 
 const handler = (req, res) => {
-  const userDoc = res.locals.user?.data
+  const userDoc = req.user?.data
   if (userDoc)
     res.send({
       data: {
@@ -14,7 +14,7 @@ const handler = (req, res) => {
       error: {
         kind: 'no user',
         message: "Couldn't find user",
-        cause: res.locals.user?.error,
+        cause: req.user?.error,
       },
     })
 }

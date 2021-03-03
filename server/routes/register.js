@@ -39,7 +39,7 @@ const router = (config) =>
       } = req.body
 
       try {
-        res.locals.user.data = await User.create({
+        req.user.data = await User.create({
           ...userRegistration,
           password: await hash(validPassword(password), saltRounds),
         })

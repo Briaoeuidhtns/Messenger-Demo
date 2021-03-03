@@ -8,7 +8,7 @@ const { verify } = require('jsonwebtoken')
  * The resulting local will be the parsed jwt converted by `convert` in the
  * `data` key, or the error that occurred `error` key
  */
-const jwtCookieParser = ({ cookie, name, jwtOpts, key, convert = (x) => x }) =>
+const jwtCookieParser = ({ cookie, jwtOpts, key, convert = (x) => x }) =>
   asyncHandler(async (req, res, next) => {
     const token = req.cookies[cookie]
     const parsed = {}
@@ -21,16 +21,17 @@ const jwtCookieParser = ({ cookie, name, jwtOpts, key, convert = (x) => x }) =>
         // Not necessarily fatal, so just make available
         parsed.error = err
       }
-    res.locals[name] = parsed
+    req.user = parsed
     next()
   })
+
 const requireUser = (req, res, next) => {
-  if (res.locals.user?.data) next()
+  if (req.user?.data) next()
   else
     res.status(401).send({
       error: {
         kind: 'authentication',
-        cause: res.locals.user?.error?.message,
+        cause: req.user?.error?.message,
       },
     })
 }

@@ -1,7 +1,6 @@
 const { User } = require('../schema/User')
 const asyncHandler = require('./asyncHandler')
 const express = require('express')
-const { sign } = require('jsonwebtoken')
 const { compare } = require('bcrypt')
 const sendUserInfo = require('../middleware/sendUserInfo')
 const addJwtCookie = require('../middleware/addJwtCookie')
@@ -17,7 +16,7 @@ const configure = (config) =>
       const realUser = await User.findOne({ email }).exec()
       const realHash = realUser?.password
       if (realHash && (await compare(password, realHash))) {
-        res.locals.user = { data: realUser }
+        req.user = { data: realUser }
         next()
       } else {
         res.status(401).send({ error: { kind: 'invalid credentials' } })
