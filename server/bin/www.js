@@ -6,6 +6,7 @@ const app = require('../app')
 const http = require('http')
 const mongoose = require('mongoose')
 const { User } = require('../schema/User')
+const io = require('../io')
 
 /**
  * Normalize a port into a number, string, or false.
@@ -47,8 +48,9 @@ const run = async () => {
   const port = normalizePort(process.env.PORT || '3001')
   app.set('port', port)
 
+  let server
   try {
-    const server = await listen(http.createServer(app), port)
+    server = await listen(http.createServer(app), port)
 
     const addr = server.address()
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
@@ -73,6 +75,8 @@ const run = async () => {
         throw error
     }
   }
+
+  io.attach(server)
 }
 
 run()
