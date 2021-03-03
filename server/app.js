@@ -33,7 +33,7 @@ app.use(
   loginRouter({
     cookie: JWT_COOKIE_NAME,
     key: process.env.JWT_PRIVATE_KEY,
-    jwtOpts: { algorithm: process.env.JWT_ALG },
+    jwtOpts: { algorithm: process.env.JWT_ALG, expiresIn: '1h' },
   }),
   registerRouter
 )
