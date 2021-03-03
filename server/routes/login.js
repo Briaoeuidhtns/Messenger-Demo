@@ -3,11 +3,11 @@ const asyncHandler = require('./asyncHandler')
 const express = require('express')
 const { sign } = require('jsonwebtoken')
 const { compare } = require('bcrypt')
+const sendUserInfo = require('../middleware/sendUserInfo')
+const addJwtCookie = require('../middleware/addJwtCookie')
 
-const configure = ({ key, jwtOpts, cookie }) => {
-  const router = express.Router()
-
-  router.post(
+const configure = (config) =>
+  express.Router().post(
     '/login',
     asyncHandler(async (req, res, next) => {
       const {
@@ -16,22 +16,15 @@ const configure = ({ key, jwtOpts, cookie }) => {
 
       const realUser = await User.findOne({ email }).exec()
       const realHash = realUser?.password
-
       if (realHash && (await compare(password, realHash))) {
-        res
-          .status(200)
-          .cookie(cookie, sign({ data: { id: realUser._id } }, key, jwtOpts), {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'Strict',
-          })
-          .send({ data: { kind: 'success' } })
+        res.locals.user = { data: realUser }
+        next()
       } else {
         res.status(401).send({ error: { kind: 'invalid credentials' } })
       }
-    })
+    }),
+    addJwtCookie(config),
+    sendUserInfo
   )
-  return router
-}
 
 module.exports = configure

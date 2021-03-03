@@ -3,8 +3,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const { User } = require('../schema/User')
 const { hash } = require('bcrypt')
-
-const router = express.Router()
+const sendUserInfo = require('../middleware/sendUserInfo')
+const addJwtCookie = require('../middleware/addJwtCookie')
 
 /** The bcrypt default salt difficulty */
 const saltRounds = 10
@@ -30,37 +30,41 @@ const validPassword = (pw) => {
   return pw
 }
 
-router.post(
-  '/register',
-  asyncHandler(async (req, res, next) => {
-    const {
-      user: { password, ...user },
-    } = req.body
+const router = (config) =>
+  express.Router().post(
+    '/register',
+    asyncHandler(async (req, res, next) => {
+      const {
+        user: { password, ...userRegistration },
+      } = req.body
 
-    try {
-      await User.create({
-        ...user,
-        password: await hash(validPassword(password), saltRounds),
-      })
-
-      res.status(201).send({ data: { kind: 'success' } })
-    } catch (err) {
-      if (err instanceof mongoose.Error.ValidationError) {
-        const { password, ...errors } = err.errors
-        // Shouldn't ever be errors from mongoose validation in pw,
-        // but if there are it's a server error
-        if (password) throw password
-        res.status(400).send({
-          error: {
-            kind: 'validation',
-            items: Object.fromEntries(
-              Object.entries(errors).map(([p, e]) => [p, e.message])
-            ),
-          },
+      try {
+        res.locals.user.data = await User.create({
+          ...userRegistration,
+          password: await hash(validPassword(password), saltRounds),
         })
-      } else throw err
-    }
-  })
-)
+
+        res.status(201)
+        next()
+      } catch (err) {
+        if (err instanceof mongoose.Error.ValidationError) {
+          const { password, ...errors } = err.errors
+          // Shouldn't ever be errors from mongoose validation in pw,
+          // but if there are it's a server error
+          if (password) throw password
+          res.status(400).send({
+            error: {
+              kind: 'validation',
+              items: Object.fromEntries(
+                Object.entries(errors).map(([p, e]) => [p, e.message])
+              ),
+            },
+          })
+        } else throw err
+      }
+    }),
+    addJwtCookie(config),
+    sendUserInfo
+  )
 
 module.exports = router
