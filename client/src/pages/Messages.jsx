@@ -1,46 +1,77 @@
 import React, { useEffect, useState } from 'react'
 import { useSocket } from '../context/SocketContext'
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@material-ui/core'
 
 const Messages = () => {
   const socket = useSocket()
   const [messages, setMessages] = useState([])
-  const [to, setTo] = useState('')
   const [content, setContent] = useState('')
 
   useEffect(() => {
     const new_message = [
       'new_message',
-      (msg) => {
-        console.log('new_message', msg)
-        setMessages((m) => [...m, msg])
-      },
+      (msg) => setMessages((m) => [...m, msg]),
     ]
+
     socket.on(...new_message)
     const connect_error = ['connect_error', (err) => console.error(err)]
     socket.on(...connect_error)
-    window.io = socket
     return () => {
       socket.off(...new_message)
       socket.off(...connect_error)
     }
   }, [socket])
 
+  const [to, setTo] = useState('')
+  const [toOpts, setToOpts] = useState([])
+  const [toSelected, setToSelected] = useState()
+
+  useEffect(() => {
+    let active = true
+    socket.emit('find_user', to, (res) => {
+      if (active) setToOpts(res)
+    })
+  }, [to, socket])
+
   return (
     <div>
-      <label>
-        To: <input value={to} onChange={(e) => setTo(e.target.value)} />
-      </label>
-      <label>
-        Message:{' '}
-        <input value={content} onChange={(e) => setContent(e.target.value)} />
-      </label>
-      <button
+      <div>
+        <TextField
+          label="Send to"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+        <List value={toOpts}>
+          {toOpts.map((o) => (
+            <ListItem
+              button
+              selected={toSelected === o._id}
+              onClick={() => setToSelected(o._id)}
+              key={o._id}
+            >
+              <ListItemText primary={o.name} secondary={o.email} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+      <TextField
+        label="Message"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <Button
         onClick={() => {
-          socket.emit('send_message', { to, content })
+          socket.emit('send_message', { to: toSelected, content })
         }}
       >
         Send
-      </button>
+      </Button>
       <ol>
         {messages.map((m, key) => (
           <li key={key}>
