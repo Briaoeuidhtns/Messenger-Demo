@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 import { useUser } from './UserContext'
 
-export const SocketContext = createContext()
+export const SocketContext = createContext(io({ autoConnect: false }))
 
 export const SocketManager = ({ children }) => {
   const { user } = useUser()
