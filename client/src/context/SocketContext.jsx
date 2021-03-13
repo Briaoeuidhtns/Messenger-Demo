@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 import { useUser } from './UserContext'
 
-export const SocketContext = createContext(io({ autoConnect: false }))
+export const SocketContext = createContext()
 
 export const SocketManager = ({ children }) => {
   const { user } = useUser()
@@ -11,7 +11,17 @@ export const SocketManager = ({ children }) => {
   useEffect(() => {
     if (user) {
       socket.connect()
-      socket.once('connected', (i) => console.log('connected', i))
+
+      const connected = ['connected', (i) => console.log('connected', i)]
+      socket.once(...connected)
+
+      const connect_error = ['connect_error', (err) => console.error(err)]
+      socket.on(...connect_error)
+
+      return () => {
+        socket.off(...connected)
+        socket.off(...connect_error)
+      }
     }
   }, [user, socket])
 
