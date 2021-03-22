@@ -46,7 +46,6 @@ io.on('connection', (socket) => {
 
   socket.on('send_message', async ({ content, to }) => {
     const msg = await Message.create({ content, to, from: user._id })
-    console.log(msg)
     socket.to(to).emit('new_message', msg)
   })
 
