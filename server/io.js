@@ -1,10 +1,10 @@
-const asyncHandler = require('./routes/asyncHandler')
 const { Server } = require('socket.io')
 const cookieParser = require('cookie-parser')
 const { jwtCookieParser, requireUser } = require('./middleware/auth')
 const { User } = require('./schema/User')
 const { Message } = require('./schema/Message')
 const { ObjectId } = require('mongoose').Types
+const util = require('util')
 const io = new Server(undefined, {
   cors: {
     origin: 'http://localhost:3000',
@@ -50,31 +50,31 @@ io.on('connection', (socket) => {
     socket.to(to).emit('new_message', msg)
   })
 
-  socket.on('get_conversations', async (cb) =>
-    cb(
+  socket.on(
+    'get_conversations',
+    util.callbackify(async () =>
       (
         await Message.aggregate([
           { $match: { $or: [{ to: user._id }, { from: user._id }] } },
           { $project: { incl: ['$from', '$to'] } },
           { $unwind: '$incl' },
           { $group: { _id: '$incl' } },
-        ]).exec()
+        ])
       ).map((x) => x._id)
     )
   )
 
-  socket.on('get_conversation', async (rawId, cb) => {
-    const id = ObjectId(rawId)
-    cb(
-      await Message.aggregate([
-        { $match: { $or: [{ to: id }, { from: id }] } },
-        { $sort: { createdAt: 1 } },
-      ]).exec()
-    )
-  })
+  socket.on(
+    'get_conversation',
+    util.callbackify(async (rawId) => {
+      const id = ObjectId(rawId)
+      return await Message.find({ to: id }).sort({ createdAt: 'ascending' })
+    })
+  )
 
-  socket.on('find_user', async (query, cb) => {
-    cb(
+  socket.on(
+    'find_user',
+    util.callbackify(async (query) =>
       query == null
         ? []
         : await User.find(
@@ -83,9 +83,8 @@ io.on('connection', (socket) => {
           )
             .sort({ score: { $meta: 'textScore' } })
             .limit(10)
-            .exec()
     )
-  })
+  )
 
   socket.on('disconnect', () => {
     update(online, user._id.toString(), (x) => x - 1)

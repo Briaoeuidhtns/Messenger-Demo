@@ -7,6 +7,7 @@ import {
   ListItemText,
   TextField,
 } from '@material-ui/core'
+import useSWR from 'swr'
 
 const Messages = () => {
   const socket = useSocket()
@@ -29,15 +30,8 @@ const Messages = () => {
   }, [socket])
 
   const [to, setTo] = useState('')
-  const [toOpts, setToOpts] = useState([])
   const [toSelected, setToSelected] = useState()
-
-  useEffect(() => {
-    let active = true
-    socket.emit('find_user', to, (res) => {
-      if (active) setToOpts(res)
-    })
-  }, [to, socket])
+  const { data: toOpts } = useSWR(['find_user', to])
 
   return (
     <div>
@@ -48,7 +42,7 @@ const Messages = () => {
           onChange={(e) => setTo(e.target.value)}
         />
         <List value={toOpts}>
-          {toOpts.map((o) => (
+          {toOpts?.map((o) => (
             <ListItem
               button
               selected={toSelected === o._id}
