@@ -5,15 +5,11 @@ const { compare } = require('bcrypt')
 
 const addJwtCookie = ({ key, jwtOpts, cookie }) => (req, res, next) => {
   res
-    .cookie(
-      cookie,
-      sign({ data: { email: req.user.data.email } }, key, jwtOpts),
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'Strict',
-      }
-    )
+    .cookie(cookie, sign({ data: { _id: req.user.data._id } }, key, jwtOpts), {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+    })
     .cookie('AUTHENTICATED', true, {
       httpOnly: false,
       secure: true,

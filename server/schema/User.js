@@ -49,7 +49,7 @@ const UserSchema = new Schema(
       }
 
       static fromClaim(claim) {
-        return this.findOne({ email: claim.data.email }).exec()
+        return this.findOne({ _id: claim.data._id }).exec()
       }
     }
   )
