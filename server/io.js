@@ -107,7 +107,7 @@ io.on('connection', (socket) => {
       query == null
         ? []
         : await User.find(
-            { $text: { $search: query } },
+            { $text: { $search: query }, _id: { $ne: user._id } },
             { score: { $meta: 'textScore' } }
           )
             .sort({ score: { $meta: 'textScore' } })
