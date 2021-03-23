@@ -1,7 +1,7 @@
 const { Server } = require('socket.io')
 const cookieParser = require('cookie-parser')
 const { jwtCookieParser, requireUser } = require('./middleware/auth')
-const { User } = require('./schema/User')
+const { User, registerOnlineGetter } = require('./schema/User')
 const { Message } = require('./schema/Message')
 const util = require('util')
 const { Conversation } = require('./schema/Conversation')
@@ -13,6 +13,7 @@ const io = new Server(undefined, {
 
 const online = new Map()
 io.online = online
+registerOnlineGetter((id) => !!online.get(id.toString()))
 
 const JWT_COOKIE_NAME = 'SESSION_TOKEN'
 

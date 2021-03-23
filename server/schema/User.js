@@ -2,6 +2,8 @@ const { Schema, model } = require('mongoose')
 const { hash } = require('bcrypt')
 const beautifyUnique = require('mongoose-beautiful-unique-validation')
 
+let onlineGetter
+
 const UserSchema = new Schema(
   {
     email: {
@@ -36,13 +38,31 @@ const UserSchema = new Schema(
         delete ret.password
       },
     },
-  }
+  },
+  { strictQuery: 'throw' }
 )
-UserSchema.plugin(beautifyUnique)
-UserSchema.statics.fromClaim = function (claim) {
-  return this.findOne({ email: claim.data.email }).exec()
-}
+  .plugin(beautifyUnique)
+  .loadClass(
+    class {
+      get online() {
+        return onlineGetter(this._id)
+      }
 
+      static fromClaim(claim) {
+        return this.findOne({ email: claim.data.email }).exec()
+      }
+    }
+  )
 const User = model('User', UserSchema)
 
-module.exports = { User, UserSchema }
+/**
+ * Set the function to be used to determine if a user id is online
+ */
+const registerOnlineGetter = (g) => {
+  // I can't find a way to just attach this to the model and access it from
+  // the getter on the doc, but the store is already global, so it doesn't
+  // seem important that this is either
+  onlineGetter = g
+}
+
+module.exports = { User, UserSchema, registerOnlineGetter }
