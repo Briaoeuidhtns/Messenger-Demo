@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { useSocket } from '../context/SocketContext'
 import {
   Button,
@@ -31,6 +31,10 @@ const Messages = () => {
 
   const [to, setTo] = useState('')
   const [toSelected, setToSelected] = useState()
+  const toSelectedList = useMemo(() => [toSelected], [toSelected])
+  const { data: toSelectedConversation } = useSWR(
+    toSelected && ['get_conversation_by_users', toSelectedList]
+  )
   const { data: toOpts } = useSWR(['find_user', to])
 
   return (
@@ -41,7 +45,7 @@ const Messages = () => {
           value={to}
           onChange={(e) => setTo(e.target.value)}
         />
-        <List value={toOpts}>
+        <List>
           {toOpts?.map((o) => (
             <ListItem
               button
@@ -60,8 +64,11 @@ const Messages = () => {
         onChange={(e) => setContent(e.target.value)}
       />
       <Button
-        onClick={() => {
-          socket.emit('send_message', { to: toSelected, content })
+        onClick={async () => {
+          socket.emit('send_message', {
+            to: toSelectedConversation._id,
+            content,
+          })
         }}
       >
         Send

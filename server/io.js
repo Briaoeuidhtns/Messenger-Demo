@@ -3,8 +3,8 @@ const cookieParser = require('cookie-parser')
 const { jwtCookieParser, requireUser } = require('./middleware/auth')
 const { User } = require('./schema/User')
 const { Message } = require('./schema/Message')
-const { ObjectId } = require('mongoose').Types
 const util = require('util')
+const { Conversation } = require('./schema/Conversation')
 const io = new Server(undefined, {
   cors: {
     origin: 'http://localhost:3000',
@@ -45,32 +45,62 @@ io.on('connection', (socket) => {
   update(online, user._id.toString(), (x = 0) => x + 1)
 
   socket.on('send_message', async ({ content, to }) => {
-    const msg = await Message.create({ content, to, from: user._id })
-    socket.to(to).emit('new_message', msg)
+    await Conversation.findById(to)
+    const msg = await (await Message.create({ content, to, from: user._id }))
+      .populate('to')
+      .execPopulate()
+
+    const msgObject = msg.toObject({ depopulate: true })
+    msg.to.members.forEach((u) => socket.to(u).emit('new_message', msgObject))
   })
 
+  /**
+   * Get all conversations this user is in
+   */
   socket.on(
     'get_conversations',
-    util.callbackify(async () =>
-      (
-        await Message.aggregate([
-          { $match: { $or: [{ to: user._id }, { from: user._id }] } },
-          { $project: { incl: ['$from', '$to'] } },
-          { $unwind: '$incl' },
-          { $group: { _id: '$incl' } },
-        ])
-      ).map((x) => x._id)
+    util.callbackify(
+      async () => await Conversation.find().where('members').in([user._id])
     )
   )
 
+  /**
+   * Get a conversation by the conversation id
+   */
   socket.on(
-    'get_conversation',
-    util.callbackify(async (rawId) => {
-      const id = ObjectId(rawId)
-      return await Message.find({ to: id }).sort({ createdAt: 'ascending' })
-    })
+    'get_conversation_by_id',
+    util.callbackify(async (conversationId) =>
+      (
+        await Message.find({ to: conversationId })
+          .sort('createdAt')
+          .populate({ path: 'members', match: { _id: { $ne: user._id } } })
+      ).toObject({ virtual: true })
+    )
   )
 
+  /**
+   * Get a conversation by the user(s) involved
+   *
+   * The authorized user is implicitly included in the query.
+   *
+   * The query will only match conversations exactly matching the user list.
+   *
+   * If the conversation doesn't exist, it will be created
+   */
+  socket.on(
+    'get_conversation_by_users',
+    util.callbackify(async (users) =>
+      (
+        await Conversation.findOrCreate({
+          members: [...users, user._id.toString()],
+        }).populate({ path: 'members', match: { _id: { $ne: user._id } } })
+      ).toObject({ virtuals: true })
+    )
+  )
+
+  /**
+   * Find another user by fuzzy text search
+   */
   socket.on(
     'find_user',
     util.callbackify(async (query) =>
