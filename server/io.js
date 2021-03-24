@@ -46,7 +46,6 @@ io.on('connection', (socket) => {
   update(online, user._id.toString(), (x = 0) => x + 1)
 
   socket.on('send_message', async ({ content, to }) => {
-    await Conversation.findById(to)
     const msg = await (await Message.create({ content, to, from: user._id }))
       .populate('to')
       .execPopulate()
