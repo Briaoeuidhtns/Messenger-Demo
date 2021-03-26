@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 
 import Bubble from './Bubble'
 import { Box, InputBase } from '@material-ui/core'
-import { useUser } from 'context/UserContext'
-import { useCache } from 'context/Cache'
 import { useSocket } from 'context/SocketContext'
+import useSWR from 'swr'
 
 const useStyles = makeStyles((theme) => ({
   inputInput: {
@@ -25,37 +24,29 @@ const Chat = ({ conversation }) => {
   const classes = useStyles()
   const socket = useSocket()
   const [msgValue, setMsgValue] = useState('')
-  const me = useUser()
 
-  const [messages, setMessages] = useState([])
-  const ids = useMemo(() => new Set(messages.map((m) => m.from)), [messages])
-  const userInfo = useCache(ids)
+  const { data: messages } = useSWR(
+    conversation && ['get_conversation_messages', conversation._id]
+  )
 
   const onSendMessage = () => {
     const msg = { content: msgValue, to: conversation }
     socket.emit('send_message', msg)
-    setMessages((m) => [...m, { ...msg, from: me._id, createdAt: new Date() }])
   }
 
-  useEffect(() => setMessages([]), [conversation])
-
-  useEffect(() => {
-    const new_message = [
-      'new_message',
-      (msg) => {
-        if (msg.from === conversation) setMessages((m) => [...m, msg])
-      },
-    ]
-    socket.on(...new_message)
-    return () => {
-      socket.off(...new_message)
-    }
-  }, [conversation, socket])
-
   const msgEndScrollMarker = useRef()
-  const scrollToBottom = () =>
-    msgEndScrollMarker.current?.scrollIntoView({ behavior: 'smooth' })
-  useEffect(scrollToBottom, [messages])
+  // Don't smooth scroll while initially loading a conversation
+  const prevConversation = useRef()
+  const scrollToBottom = () => {
+    // Don't scroll until done rerendering from everything loading
+    if (msgEndScrollMarker.current && conversation && messages) {
+      msgEndScrollMarker.current.scrollIntoView({
+        behavior: prevConversation.current === conversation ? 'smooth' : 'auto',
+      })
+      prevConversation.current = conversation
+    }
+  }
+  useEffect(scrollToBottom, [messages, conversation])
 
   return (
     <Box
@@ -68,11 +59,11 @@ const Chat = ({ conversation }) => {
       className={classes.noMinHeight}
     >
       <Box className={classes.scroll} component="ol" p={0} m={0}>
-        {messages.map(({ content, from, createdAt }, idx) => (
+        {messages?.map(({ content, from, createdAt }, idx) => (
           <Bubble
             key={idx}
             value={content}
-            sender={from === me._id ? undefined : userInfo[from] ?? {}}
+            sender={conversation.members.find((u) => u._id === from)}
             sendTime={createdAt}
           />
         ))}

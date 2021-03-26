@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import { io } from 'socket.io-client'
 import { useUser } from './UserContext'
+import { promisify } from 'util'
 
 export const SocketContext = createContext()
 
@@ -31,3 +32,8 @@ export const SocketManager = ({ children }) => {
 }
 
 export const useSocket = () => useContext(SocketContext)
+
+export const useFetcher = () => {
+  const socket = useSocket()
+  return useMemo(() => promisify(socket.emit.bind(socket)), [socket])
+}

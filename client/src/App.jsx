@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { MuiThemeProvider } from '@material-ui/core'
 import { theme } from './themes/theme.js'
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom'
@@ -7,21 +7,10 @@ import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import Messages from './pages/Messages'
 import { UserManager } from './context/UserContext'
-import { SocketManager, useSocket } from './context/SocketContext'
+import { SocketManager } from './context/SocketContext'
+import SWRSocketConfig from 'SWRSocketConfig'
 import AuthorizedRoute, { unknown } from './AuthorizedRoute'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { SWRConfig } from 'swr'
-import { promisify } from 'util'
-
-/**
- * SWR config with a fetcher that uses socket.io from `useSocket`, and sends
- * requests with a nodeback style ack
- */
-const SWRSocketConfig = ({ children, config }) => {
-  const socket = useSocket()
-  const fetcher = useMemo(() => promisify(socket.emit.bind(socket)), [socket])
-  return <SWRConfig value={{ ...config, fetcher }}>{children}</SWRConfig>
-}
 
 const App = () => (
   <MuiThemeProvider theme={theme}>

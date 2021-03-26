@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => {
   }
 })
 
-const UserAvatar = ({ online, user }) => {
-  const status = online ? 'online' : 'offline'
+const UserAvatar = ({ user }) => {
+  const status = user.online ? 'online' : 'offline'
   const classes = useStyles({ status })
 
   return (

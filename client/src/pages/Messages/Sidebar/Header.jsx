@@ -20,7 +20,7 @@ const Header = ({ user }) => {
   const classes = useStyles()
   return (
     <div className={classes.root}>
-      <UserAvatar user={user} online />
+      <UserAvatar user={user} />
       <Typography variant="h3" noWrap className={classes.name}>
         {user.name}
       </Typography>

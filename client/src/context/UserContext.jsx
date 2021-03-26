@@ -1,10 +1,22 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import cookie from 'cookie'
 
 export const UserContext = createContext()
 
 export const UserManager = ({ children }) => {
-  const [user, setUser] = useState()
+  const [user, setUserRaw] = useState()
+  // The current user should always be online, but we may fetch user info before socketio has connected
+  // So the api will mark us as offline, which is correct, but not how we should appear in app
+  const setUser = useCallback(
+    (user) => setUserRaw(user && { ...user, online: true }),
+    [setUserRaw]
+  )
   const [error, setError] = useState()
 
   const login = async (email, password) => {
@@ -52,7 +64,7 @@ export const UserManager = ({ children }) => {
     // but may have been logged in before, or in another tab
     const isAuthed = cookie.parse(document.cookie).AUTHENTICATED
     if (isAuthed && !user) infoRequest().then(setUser, setError)
-  }, [user])
+  }, [user, setUser])
 
   const logout = async () => {
     await fetch('/user/logout', {

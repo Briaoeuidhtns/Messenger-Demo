@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { List, Box, Typography, InputBase, SvgIcon } from '@material-ui/core'
@@ -7,7 +7,8 @@ import Conversation from './Conversation'
 import Header from './Header'
 import { ReactComponent as SearchSvg } from './Search.svg'
 import { useUser } from 'context/UserContext'
-import { useCache } from 'context/Cache'
+import useSWR from 'swr'
+import { useFetcher } from 'context/SocketContext'
 
 const SearchIcon = (props) => (
   <SvgIcon
@@ -57,13 +58,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Sidebar = ({ conversations, search, setSearch, onSelect }) => {
+const Sidebar = ({ active, setActive }) => {
   const classes = useStyles()
-  const me = useUser()
-  const userIds = useMemo(() => conversations.map(({ user }) => user), [
-    conversations,
-  ])
-  const userInfo = useCache(userIds)
+  const fetcher = useFetcher()
+  const { user: me } = useUser()
+
+  const [search, setSearch] = useState('')
+
+  const { data: searchResults } = useSWR(search && ['find_user', search])
+
+  const { data: conversations, mutate: mutateConversations } = useSWR(
+    'get_conversations',
+    // No change events for this data yet, reenable to keep fresher
+    { revalidateOnFocus: true }
+  )
+
+  const onSelectSearchResult = async (selected) =>
+    await mutateConversations(async (prev = []) => {
+      setSearch('')
+      const conversation = await fetcher('get_conversation_by_users', [
+        selected,
+      ])
+      setActive(conversation)
+
+      return [conversation, ...prev.filter((c) => c._id !== conversation._id)]
+    })
 
   return (
     <Box className={classes.root}>
@@ -83,14 +102,21 @@ const Sidebar = ({ conversations, search, setSearch, onSelect }) => {
         />
       </Box>
       <List disablePadding>
-        {conversations.map(({ user, ...props }, idx) => (
-          <Conversation
-            user={userInfo[user] ?? {}}
-            {...props}
-            key={idx}
-            onClick={() => onSelect(user)}
-          />
-        ))}
+        {search
+          ? searchResults?.map((user, idx) => (
+              <Conversation
+                user={user}
+                key={idx}
+                onClick={() => onSelectSearchResult(user._id)}
+              />
+            ))
+          : conversations?.map((c, idx) => (
+              <Conversation
+                user={c.members[0]}
+                key={idx}
+                onClick={() => setActive(c)}
+              />
+            ))}
       </List>
     </Box>
   )

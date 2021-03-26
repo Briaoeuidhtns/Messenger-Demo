@@ -27,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
   unread: { right: theme.spacing(2.5), paddingLeft: theme.spacing(4) },
 }))
 
-const Conversation = ({ user, unread = 0, lastMessage, online, onClick }) => {
+const Conversation = ({ user, unread = 0, lastMessage, onClick }) => {
   const classes = useStyles()
   return (
     <ListItem className={classes.root} button {...{ onClick }}>
       <ListItemAvatar>
-        <UserAvatar {...{ user, online }} />
+        <UserAvatar {...{ user }} />
       </ListItemAvatar>
       <ListItemText
         primary={user.name}
