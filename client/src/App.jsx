@@ -13,8 +13,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { SWRConfig } from 'swr'
 import { promisify } from 'util'
 
-import './App.css'
-
 /**
  * SWR config with a fetcher that uses socket.io from `useSocket`, and sends
  * requests with a nodeback style ack
