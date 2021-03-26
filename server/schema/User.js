@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose')
 const { hash } = require('bcrypt')
 const beautifyUnique = require('mongoose-beautiful-unique-validation')
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals')
 
 let onlineGetter
 
@@ -42,6 +43,7 @@ const UserSchema = new Schema(
   { strictQuery: 'throw' }
 )
   .plugin(beautifyUnique)
+  .plugin(mongooseLeanVirtuals)
   .loadClass(
     class {
       get online() {

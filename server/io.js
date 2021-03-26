@@ -51,7 +51,9 @@ io.on('connection', (socket) => {
       .execPopulate()
 
     const msgObject = msg.toObject({ depopulate: true })
-    msg.to.members.forEach((u) => socket.to(u).emit('new_message', msgObject))
+    msg.to.members.forEach((u) =>
+      io.to(u.toString()).emit('new_message', msgObject)
+    )
   })
 
   /**
@@ -60,21 +62,23 @@ io.on('connection', (socket) => {
   socket.on(
     'get_conversations',
     util.callbackify(
-      async () => await Conversation.find().where('members').in([user._id])
+      async () =>
+        await Conversation.find()
+          .where('members')
+          .in([user._id])
+          .populate({ path: 'members', match: { _id: { $ne: user._id } } })
+          .lean({ virtuals: true })
     )
   )
 
   /**
-   * Get a conversation by the conversation id
+   * Get messages in a conversation by the conversation id
    */
   socket.on(
-    'get_conversation_by_id',
-    util.callbackify(async (conversationId) =>
-      (
-        await Message.find({ to: conversationId })
-          .sort('createdAt')
-          .populate({ path: 'members', match: { _id: { $ne: user._id } } })
-      ).toObject({ virtual: true })
+    'get_conversation_messages',
+    util.callbackify(
+      async (conversationId) =>
+        await Message.find({ to: conversationId }).sort('createdAt').lean()
     )
   )
 
@@ -89,12 +93,13 @@ io.on('connection', (socket) => {
    */
   socket.on(
     'get_conversation_by_users',
-    util.callbackify(async (users) =>
-      (
+    util.callbackify(
+      async (users) =>
         await Conversation.findOrCreate({
           members: [...users, user._id.toString()],
-        }).populate({ path: 'members', match: { _id: { $ne: user._id } } })
-      ).toObject({ virtuals: true })
+        })
+          .populate({ path: 'members', match: { _id: { $ne: user._id } } })
+          .lean({ virtuals: true })
     )
   )
 
@@ -112,6 +117,7 @@ io.on('connection', (socket) => {
           )
             .sort({ score: { $meta: 'textScore' } })
             .limit(10)
+            .lean({ virtuals: true })
     )
   )
 
