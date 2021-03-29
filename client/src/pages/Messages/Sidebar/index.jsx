@@ -113,6 +113,7 @@ const Sidebar = ({ active, setActive }) => {
           : conversations?.map((c, idx) => (
               <Conversation
                 user={c.members[0]}
+                lastMessage={c.lastMessage}
                 key={idx}
                 onClick={() => setActive(c)}
               />

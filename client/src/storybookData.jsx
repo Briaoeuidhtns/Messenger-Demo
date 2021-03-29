@@ -1,3 +1,6 @@
+import SocketMock from 'socket.io-mock'
+import { callbackify } from 'util'
+
 export const randomObjectId = (size = 16) =>
   [...Array(size)]
     .map(() => Math.floor(Math.random() * 16).toString(16))
@@ -56,7 +59,8 @@ export const conversations = [
   ['julia', 'Do you have any plans?', false],
   ['cheng', 'Message', false],
 ].map(([nameq, lastMessage, online, unread = 0]) => ({
-  user: users.find(({ name }) => name === nameq)._id,
+  _id: randomObjectId(),
+  members: [users.find(({ name }) => name === nameq)],
   online,
   lastMessage,
   unread,
@@ -71,3 +75,22 @@ export const searchConversations = (query) => {
   }
   return conversations
 }
+
+export const createSocketMock = () =>
+  // Normally socket.io queues emits until there's a connection, but the mock
+  // is always connected, so there's a race condition between registering this
+  // handler and calling search in the component.
+
+  // Instead of changing the code to work with a mock with incorrect behavior,
+  // register when creating to ensure it happens first.
+  new SocketMock()
+    .on(
+      'get_conversations',
+      callbackify(async () => conversations)
+    )
+    .on(
+      'get_conversation_messages',
+      callbackify(async (id) => {
+        return messages
+      })
+    )

@@ -11,7 +11,7 @@ const Template = (props) => <UserAvatar {...props} />
 Template.args = { user }
 
 export const Online = Template.bind({})
-Online.args = { ...Template.args, online: true }
+Online.args = { user: { ...user, online: true } }
 
 export const Offline = Template.bind({})
-Offline.args = { ...Template.args, online: false }
+Offline.args = { user: { ...user, online: false } }
