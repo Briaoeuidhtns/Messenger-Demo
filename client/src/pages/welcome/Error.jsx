@@ -1,4 +1,4 @@
-import { Snackbar, IconButton } from '@material-ui/core'
+import { IconButton, Snackbar } from '@material-ui/core'
 import { Close as CloseIcon } from '@material-ui/icons'
 
 const Error = ({ open, onClose, message }) => (

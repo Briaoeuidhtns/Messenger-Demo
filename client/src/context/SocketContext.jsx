@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useState, useMemo } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { io } from 'socket.io-client'
-import { useUser } from './UserContext'
 import { promisify } from 'util'
+
+import { useUser } from './UserContext'
 
 export const SocketContext = createContext()
 

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import Sidebar from '.'
-import SWRSocketConfig from 'SWRSocketConfig'
 import { SocketContext } from 'context/SocketContext'
-
-import { me, createSocketMock } from 'storybookData'
 import { UserContext } from 'context/UserContext'
+import React, { useState } from 'react'
+import { createSocketMock, me } from 'storybookData'
+import SWRSocketConfig from 'SWRSocketConfig'
+
+import Sidebar from '.'
 
 export default {
   title: 'Messages/Sidebar',

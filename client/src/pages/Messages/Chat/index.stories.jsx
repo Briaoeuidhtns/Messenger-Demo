@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import Chat from '.'
-
 import { SocketContext } from 'context/SocketContext'
-import SWRSocketConfig from 'SWRSocketConfig'
 import { UserContext } from 'context/UserContext'
-import { messages, me, createSocketMock, conversations } from 'storybookData'
+import React, { useEffect, useState } from 'react'
+import { conversations, createSocketMock, me, messages } from 'storybookData'
+import SWRSocketConfig from 'SWRSocketConfig'
+
+import Chat from '.'
 
 export default {
   title: 'Messages/Chat/Chat',

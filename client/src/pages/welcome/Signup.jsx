@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Formik, Form } from 'formik'
-import { useUser } from 'context/UserContext'
-import { signupSchema } from 'schema'
 import { makeStyles } from '@material-ui/core/styles'
+import { useUser } from 'context/UserContext'
+import { Form, Formik } from 'formik'
+import React, { useCallback, useEffect, useState } from 'react'
+import { signupSchema } from 'schema'
+
+import Base from './Base'
+import ButtonHeader from './ButtonHeader'
 import Error from './Error'
 import Input from './Input'
 import SubmitButton from './SubmitButton'
-import Base from './Base'
-import ButtonHeader from './ButtonHeader'
 
 const useStyles = makeStyles((theme) => ({
   form: {

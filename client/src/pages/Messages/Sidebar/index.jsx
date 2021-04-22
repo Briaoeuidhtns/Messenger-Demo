@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-
+import { Box, InputBase, List, SvgIcon, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { List, Box, Typography, InputBase, SvgIcon } from '@material-ui/core'
+import { useFetcher } from 'context/SocketContext'
+import { useUser } from 'context/UserContext'
+import React, { useState } from 'react'
+import useSWR from 'swr'
 
 import Conversation from './Conversation'
 import Header from './Header'
 import { ReactComponent as SearchSvg } from './Search.svg'
-import { useUser } from 'context/UserContext'
-import useSWR from 'swr'
-import { useFetcher } from 'context/SocketContext'
 
 const SearchIcon = (props) => (
   <SvgIcon

@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react'
-
 import { makeStyles } from '@material-ui/core'
-
-import Bubble from './Bubble'
 import { Box, InputBase } from '@material-ui/core'
 import { useSocket } from 'context/SocketContext'
+import React, { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
+
+import Bubble from './Bubble'
 
 const useStyles = makeStyles((theme) => ({
   inputInput: {

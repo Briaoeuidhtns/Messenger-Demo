@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { useFetcher } from './context/SocketContext'
-import { SWRConfig, mutate } from 'swr'
-
 import { useSocket } from 'context/SocketContext'
+import React, { useEffect } from 'react'
+import { mutate, SWRConfig } from 'swr'
+
+import { useFetcher } from './context/SocketContext'
 
 /**
  * SWR config with a fetcher that uses socket.io from `useSocket`, and sends

@@ -1,10 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
-import * as serviceWorker from './serviceWorker'
 import '@fontsource/open-sans/400.css'
 import '@fontsource/open-sans/600.css'
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import App from './App'
+import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(<App />, document.getElementById('root'))
 

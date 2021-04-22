@@ -1,5 +1,6 @@
 import React from 'react'
-import { Route, Redirect, useLocation } from 'react-router-dom'
+import { Redirect, Route, useLocation } from 'react-router-dom'
+
 import { useUser } from './context/UserContext'
 
 export const known = (user) => !!user

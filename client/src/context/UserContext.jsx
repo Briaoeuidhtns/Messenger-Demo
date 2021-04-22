@@ -1,3 +1,4 @@
+import cookie from 'cookie'
 import {
   createContext,
   useCallback,
@@ -5,7 +6,6 @@ import {
   useEffect,
   useState,
 } from 'react'
-import cookie from 'cookie'
 
 export const UserContext = createContext()
 

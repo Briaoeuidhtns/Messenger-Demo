@@ -1,6 +1,7 @@
 import React from 'react'
-import UserAvatar from './UserAvatar'
 import { me as user } from 'storybookData'
+
+import UserAvatar from './UserAvatar'
 
 export default {
   title: 'Messages/UserAvatar',

@@ -1,7 +1,8 @@
-import React from 'react'
 import { List } from '@material-ui/core'
-import Conversation from './Conversation'
+import React from 'react'
 import { longMsg } from 'storybookData'
+
+import Conversation from './Conversation'
 
 export default {
   title: 'Messages/Sidebar/Conversation',

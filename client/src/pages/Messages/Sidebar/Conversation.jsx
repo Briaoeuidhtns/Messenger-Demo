@@ -1,12 +1,11 @@
-import React from 'react'
-
-import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
   Badge,
   ListItem,
-  ListItemText,
   ListItemAvatar,
+  ListItemText,
 } from '@material-ui/core'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
+import React from 'react'
 
 import UserAvatar from './UserAvatar'
 

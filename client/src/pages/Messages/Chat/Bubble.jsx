@@ -1,6 +1,6 @@
-import React from 'react'
+import { Avatar, Box, ListItem, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Box, Typography, ListItem, Avatar } from '@material-ui/core'
+import React from 'react'
 
 const useStyles = makeStyles((theme) => {
   return {

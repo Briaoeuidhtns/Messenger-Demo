@@ -1,8 +1,8 @@
-import React from 'react'
-
 import { List } from '@material-ui/core'
-import Bubble from './Bubble'
+import React from 'react'
 import { longMsg } from 'storybookData'
+
+import Bubble from './Bubble'
 
 export default {
   title: 'Messages/Chat/Bubble',
