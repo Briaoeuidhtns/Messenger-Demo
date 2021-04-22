@@ -12,8 +12,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(4),
   },
-  name: { flexGrow: 1, marginLeft: theme.spacing(2) },
-  icon: { color: '#95A7C4' },
+
+  name: {
+    flexGrow: 1,
+    marginLeft: theme.spacing(2),
+  },
+  icon: { color: '#95a7c4' },
 }))
 
 const Header = ({ user }) => {

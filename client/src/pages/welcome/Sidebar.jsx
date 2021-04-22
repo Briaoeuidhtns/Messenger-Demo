@@ -13,10 +13,12 @@ const useStyles = makeStyles({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
+
   overlay: {
     backgroundImage:
       'linear-gradient(rgb(58, 141, 255, 0.75), rgb(134, 185, 255, 0.75))',
   },
+
   heroText: {
     textAlign: 'center',
     marginTop: 30,
@@ -24,6 +26,7 @@ const useStyles = makeStyles({
     fontWeight: 400,
     color: '#fff',
   },
+
   icon: {
     fontSize: 67,
   },

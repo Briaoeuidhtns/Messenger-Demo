@@ -10,7 +10,11 @@ import Base from './Base'
 import ButtonHeader from './ButtonHeader'
 
 const useStyles = makeStyles((theme) => ({
-  form: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 }))
 
 const Signup = () => {

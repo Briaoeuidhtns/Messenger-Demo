@@ -9,9 +9,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 5,
     boxShadow: '0px 2px 12px rgba(74, 106, 149, 0.2)',
     color: '#3a8dff',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
     marginRight: theme.spacing(5.25),
   },
+
   label: {
     color: '#b0b0b0',
     marginRight: theme.spacing(3.75),

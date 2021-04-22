@@ -11,15 +11,15 @@ export const theme = createMuiTheme({
     fontFamily: '"Open Sans"',
     button: {
       textTransform: 'none',
-      fontSize: '.875rem',
+      fontSize: '0.875rem',
       fontWeight: 400,
     },
     body1: {
-      fontSize: '.875rem',
+      fontSize: '0.875rem',
       fontWeight: 600,
     },
     body2: {
-      fontSize: '.875rem',
+      fontSize: '0.875rem',
       fontWeight: 400,
     },
     caption: {
@@ -40,8 +40,8 @@ export const theme = createMuiTheme({
     },
   },
   palette: {
-    primary: { main: '#3A8DFF' },
-    background: { default: '#FFF' },
+    primary: { main: '#3a8dff' },
+    background: { default: '#fff' },
     text: { primary: '#000' },
   },
 })

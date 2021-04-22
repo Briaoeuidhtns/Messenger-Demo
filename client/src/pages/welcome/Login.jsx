@@ -14,11 +14,16 @@ const useStyles = makeStyles((theme) => ({
   forgot: {
     paddingRight: theme.spacing(1.25),
     color: '#3a8dff',
-    fontSize: '.75rem',
+    fontSize: '0.75rem',
     fontWeight: 400,
     textDecoration: 'none',
   },
-  form: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 }))
 
 const Login = () => {

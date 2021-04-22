@@ -5,15 +5,21 @@ import { makeStyles } from '@material-ui/core/styles'
 import { uniqueId } from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
-  label: { color: 'rgb(0,0,0,0.4)', paddingLeft: 5 },
+  label: {
+    color: 'rgb(0, 0, 0, 0.4)',
+    paddingLeft: 5,
+  },
+
   inputs: {
     paddingLeft: 5,
   },
+
   inputRoot: {
     paddingTop: theme.spacing(2.5),
   },
+
   underline: {
-    '&:before': {
+    '&::before': {
       borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
     },
   },

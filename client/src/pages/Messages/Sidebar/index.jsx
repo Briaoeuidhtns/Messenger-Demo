@@ -21,32 +21,40 @@ const SearchIcon = (props) => (
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: '#F5F7FB',
+    backgroundColor: '#f5f7fb',
     padding: theme.spacing(3),
     paddingBottom: 0,
     // TODO probably shouldn't be fixed, maybe collapse on small screens?
     width: 300,
   },
   title: { marginBottom: theme.spacing(1.5) },
+
   search: {
     position: 'relative',
     width: '100%',
     marginBottom: theme.spacing(2.5),
-    backgroundColor: '#E9EEF9',
+    backgroundColor: '#e9eef9',
     borderRadius: 5,
-    color: '#ADC0DE',
+    color: '#adc0de',
   },
-  searchRoot: { color: 'inherit', width: '100%' },
+
+  searchRoot: {
+    color: 'inherit',
+    width: '100%',
+  },
+
   searchInput: {
     padding: theme.spacing(2),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    color: '#000000',
+    color: '#000',
+
     '&::placeholder': {
-      color: '#ADC0DE',
+      color: '#adc0de',
       opacity: 1,
     },
   },
+
   searchIcon: {
     padding: theme.spacing(0, 2),
     height: '100%',

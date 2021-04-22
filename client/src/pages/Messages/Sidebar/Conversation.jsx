@@ -20,11 +20,15 @@ const StandaloneBadge = withStyles({
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#fff',
     borderRadius: theme.spacing(1),
     '&:not(:last-child)': { marginBottom: theme.spacing(1) },
   },
-  unread: { right: theme.spacing(2.5), paddingLeft: theme.spacing(4) },
+
+  unread: {
+    right: theme.spacing(2.5),
+    paddingLeft: theme.spacing(4),
+  },
 }))
 
 const Conversation = ({ user, unread = 0, lastMessage, onClick }) => {
