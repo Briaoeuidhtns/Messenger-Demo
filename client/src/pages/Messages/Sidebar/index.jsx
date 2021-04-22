@@ -2,7 +2,7 @@ import { Box, InputBase, List, SvgIcon, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useFetcher } from 'context/SocketContext'
 import { useUser } from 'context/UserContext'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import useSWR from 'swr'
 
 import Conversation from './Conversation'

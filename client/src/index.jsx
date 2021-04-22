@@ -2,7 +2,6 @@ import './index.css'
 import '@fontsource/open-sans/400.css'
 import '@fontsource/open-sans/600.css'
 
-import React from 'react'
 import ReactDOM from 'react-dom'
 
 import App from './App'

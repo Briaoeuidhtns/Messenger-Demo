@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { Box, InputBase } from '@material-ui/core'
 import { useSocket } from 'context/SocketContext'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 
 import Bubble from './Bubble'

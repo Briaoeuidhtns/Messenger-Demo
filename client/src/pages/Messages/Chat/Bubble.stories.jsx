@@ -1,5 +1,4 @@
 import { List } from '@material-ui/core'
-import React from 'react'
 import { longMsg } from 'storybookData'
 
 import Bubble from './Bubble'

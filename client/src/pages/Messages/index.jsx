@@ -1,5 +1,5 @@
 import { AppBar, Box, makeStyles, Typography } from '@material-ui/core'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import Chat from './Chat'
 import Sidebar from './Sidebar'

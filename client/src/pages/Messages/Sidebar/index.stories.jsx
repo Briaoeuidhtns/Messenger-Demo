@@ -1,6 +1,6 @@
 import { SocketContext } from 'context/SocketContext'
 import { UserContext } from 'context/UserContext'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { createSocketMock, me } from 'storybookData'
 import SWRSocketConfig from 'SWRSocketConfig'
 

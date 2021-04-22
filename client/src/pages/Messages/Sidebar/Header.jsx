@@ -1,7 +1,6 @@
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { MoreHoriz as MenuIcon } from '@material-ui/icons'
-import React from 'react'
 
 import UserAvatar from './UserAvatar'
 

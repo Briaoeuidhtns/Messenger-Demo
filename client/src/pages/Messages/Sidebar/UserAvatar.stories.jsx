@@ -1,4 +1,3 @@
-import React from 'react'
 import { me as user } from 'storybookData'
 
 import UserAvatar from './UserAvatar'

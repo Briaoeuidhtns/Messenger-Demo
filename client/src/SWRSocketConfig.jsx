@@ -1,5 +1,5 @@
 import { useSocket } from 'context/SocketContext'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { mutate, SWRConfig } from 'swr'
 
 import { useFetcher } from './context/SocketContext'

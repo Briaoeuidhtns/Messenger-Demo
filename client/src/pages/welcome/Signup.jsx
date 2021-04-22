@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import { useUser } from 'context/UserContext'
 import { Form, Formik } from 'formik'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { signupSchema } from 'schema'
 
 import Base from './Base'

@@ -2,7 +2,7 @@ import { TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useField } from 'formik'
 import { uniqueId } from 'lodash'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   label: {

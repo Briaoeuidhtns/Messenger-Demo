@@ -1,6 +1,5 @@
 import { Box, Grid, Hidden, SvgIcon, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import React from 'react'
 
 import { ReactComponent as MessageSvg } from './Message.svg'
 

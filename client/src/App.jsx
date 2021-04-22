@@ -1,6 +1,5 @@
 import { MuiThemeProvider } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import React from 'react'
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom'
 import SWRSocketConfig from 'SWRSocketConfig'
 
