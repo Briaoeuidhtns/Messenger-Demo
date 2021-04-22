@@ -2,9 +2,8 @@ import React from 'react'
 import { MuiThemeProvider } from '@material-ui/core'
 import { theme } from './themes/theme.js'
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Dashboard from './pages/Dashboard'
+import Login from './pages/welcome/Login'
+import Signup from './pages/welcome/Signup'
 import Messages from './pages/Messages'
 import { UserManager } from './context/UserContext'
 import { SocketManager } from './context/SocketContext'
@@ -36,9 +35,6 @@ const App = () => (
               </AuthorizedRoute>
               <AuthorizedRoute path="/messages">
                 <Messages />
-              </AuthorizedRoute>
-              <AuthorizedRoute path="/dashboard">
-                <Dashboard />
               </AuthorizedRoute>
               <Redirect exact from="/" to="/signup" />
             </Switch>

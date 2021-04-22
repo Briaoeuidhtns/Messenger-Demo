@@ -1,17 +1,26 @@
 import { createMuiTheme } from '@material-ui/core'
 export const theme = createMuiTheme({
+  overrides: {
+    MuiButton: {
+      sizeLarge: {
+        fontSize: '1rem',
+      },
+    },
+  },
   typography: {
+    fontFamily: '"Open Sans"',
     button: {
       textTransform: 'none',
+      fontSize: '.875rem',
+      fontWeight: 400,
     },
-    fontFamily: '"Open Sans"',
     body1: {
       fontSize: '.875rem',
       fontWeight: 600,
     },
     body2: {
-      fontSize: '.75rem',
-      fontWeight: 600,
+      fontSize: '.875rem',
+      fontWeight: 400,
     },
     caption: {
       fontSize: '0.6875rem',
