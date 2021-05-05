@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "yarn workspace @messenger/client build",
+    "start": "yarn workspace @messenger/server start"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "resolutions": {
+    "//": "https://github.com/storybookjs/storybook/issues/5183",
+    "babel-loader": "8.1.0"
+  }
+}

@@ -1,6 +1,5 @@
 const createError = require('http-errors')
 const express = require('express')
-const { join } = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const { jwtCookieParser } = require('./middleware/auth')
@@ -12,6 +11,15 @@ const { User } = require('./schema/User')
 const registerRouter = require('./routes/register')
 const loginRouter = require('./routes/login')
 
+const staticFiles = require('@messenger/client/route')
+console.log({ staticFiles })
+const fs = require('fs')
+fs.readdir(staticFiles, (err, files) => {
+  if (err) {
+    throw err
+  }
+  files.forEach((file) => console.log({ file }))
+})
 const { json, urlencoded, Router } = express
 
 const app = express()
@@ -22,7 +30,7 @@ app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(join(__dirname, 'public')))
+app.use(express.static(staticFiles))
 
 app.use(
   jwtCookieParser({
